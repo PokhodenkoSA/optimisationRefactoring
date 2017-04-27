@@ -1,0 +1,35 @@
+puts "AD Draw interface..."
+
+# Redefine path to test scripts directory
+set env(CSF_TestScriptsPath) [file join [file dirname [file normalize [info script]]] draw]
+
+# Load necessary modules
+pload MODELING
+pload -ADDraw
+
+# Display result. Available options are the following:
+# - shading : display result in 3D view
+# - axo     : display result in axonometric view
+# - none    : do not display result
+set Display "axo"
+
+# Define DRAW variables for internal use
+if { [info exists imagedir] == 0 } {
+  set imagedir .
+}
+
+if { [info exists test_image ] == 0 } {
+  set test_image photo
+}
+
+# Make snapshot of entire scene currently rendered in AXO viewer
+# and save it to file <scriptname>_<case>.png in results folder
+proc SnapShotAxo {case} {
+  global env
+  global imagedir
+  global test_image
+
+  set scriptname [regsub {.tcl} [regsub {.*/} [info script] {}] {}]
+  puts "Saving image to ${test_image}_${case}.png"
+  uplevel xwd $imagedir/${test_image}_${case}.png
+}

@@ -1,0 +1,29 @@
+puts "================"
+puts "OCC25127"
+puts "================"
+puts ""
+#######################################################################
+# Wrong result done by General Fuse algorithm
+#######################################################################
+
+restore [locate_data_file bug25127_b1.brep] b1
+restore [locate_data_file bug25127_b2.brep] b2
+
+bclearobjects
+bcleartools
+baddobjects b1
+baddtools b2
+bfillds
+bbuild result
+
+regexp {Mass +: +([-0-9.+eE]+)} [vprops result] full volume
+
+set expected_volume 620.091
+set tol_abs_volume 1.0e-3
+set tol_rel_volume 0.001
+checkreal "Volume" ${volume} ${expected_volume} ${tol_abs_volume} ${tol_rel_volume}
+
+set square 842.655
+
+checknbshapes result -vertex 4 -edge 6 -wire 2 -face 2 -shell 3 -solid 2 -compsolid 0 -compound 1 -shape 20
+set 3dviewer 1

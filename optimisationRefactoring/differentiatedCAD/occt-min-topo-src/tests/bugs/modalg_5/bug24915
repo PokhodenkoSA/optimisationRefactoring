@@ -1,0 +1,59 @@
+puts "TODO OCC25929 ALL: Error: Tolerance is too big!"
+
+puts "TODO OCC21564 Linux: Error : T=0.464646\tD=0.000326627"
+puts "TODO OCC21564 Linux: Error : T=0.464646\tD=0.00032747"
+
+puts "TODO OCC21564 Windows: Error : T=0.464646\tD=0.000326671"
+puts "TODO OCC21564 Windows: Error : T=0.464646\tD=0.000327516"
+
+puts "========="
+puts "CR24915"
+puts "========="
+puts ""
+###############################
+## Wrong intersection curves between two cylinders
+###############################
+
+puts "##############################"
+puts "#!!!Searh \"Attention\" keyword on this web-page for additinal checking!!!"
+puts "##############################"
+
+restore [locate_data_file bug24915_ft2.brep] b1
+restore [locate_data_file bug24915_ft3.brep] b2
+
+# 1. topology
+bclearobjects
+bcleartools
+baddobjects b1 b2
+bfillds
+bbuild r
+checkshape r
+
+# 2. geometry
+set MaxTol 5.0e-7
+set log [bopcurves b1 b2]
+
+if { ! [regexp {Tolerance Reached=+([-0-9.+eE]+)\n+([-0-9.+eE]+)} ${log} full Toler NbCurv] } {
+  puts "Error: Cannot find tolerance value in output of bopcurve command"
+}
+
+if {${Toler} > ${MaxTol}} {
+  puts "Error: Tolerance is too big!"
+}
+
+mksurface s1 b1
+mksurface s2 b2
+
+set Tolerance 2.0e-5
+set WarnTol 1.0e-7
+
+for {set i 1} {$i <= ${NbCurv}} {incr i} {
+  bounds c_$i U1 U2
+  xdistcs c_$i s1 U1 U2 100 $Tolerance $WarnTol
+  xdistcs c_$i s2 U1 U2 100 $Tolerance $WarnTol
+}
+
+smallview
+donly b2 c_2
+fit
+set only_screen_axo 1

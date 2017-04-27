@@ -1,0 +1,11 @@
+prefix=/home/salvo/IODA/refactoringOptimisation_compiled/differentiatedCAD/adolc_base
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib64
+includedir=${prefix}/include
+
+Name: adolc
+Version: 2.5.2
+Description: Algorithmic Differentiation Library for C/C++
+Requires: 
+Libs: -L${libdir} -ladolc -Wl,-rpath,${libdir}  -lm 
+Cflags: -I${includedir}

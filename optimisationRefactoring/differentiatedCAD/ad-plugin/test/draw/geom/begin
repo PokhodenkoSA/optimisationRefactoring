@@ -1,0 +1,7 @@
+# Unset the result DRAW variable to provide test independency 
+# from the previous result in case of manual invocation
+if { [isdraw res] == 1 } {
+  unset res
+}
+
+axo

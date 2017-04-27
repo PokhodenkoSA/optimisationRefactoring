@@ -1,0 +1,328 @@
+{
+          "inputFiles":
+                  {
+                  "meshPrefix"      : "ubend.",
+                  "meshSuffix"      : ".msh",
+  		"meshScaleFactor" : 1
+                  },
+          "outputFiles":
+                  {
+                  "solution"          : "solution.xdmf",
+                  "primalConvergence" : "primal.cnv",
+                  "dualConvergence"   : "adjoint.cnv",
+                  "writeRegression"   : 1,
+  		"outputMultigrid"   : 0
+                   },
+  	"caseSetup":
+  		{
+  		"sensitivityAssemblyOption": "ADJ_ADJx",
+  		"boundaryConditions":
+  			{
+  			"freestreamMachNumber"    : 0.3,
+  			"freestreamPressure"      : 739.628,
+  			"freestreamTemperature"   : 2.14039563,
+  			"freestreamFlowDirection" :
+  				{
+  				"type" : "components",
+  				"X" : 1.0,
+   				"Y" : 0.0,
+  				"Z" : 0.0
+  				},
+  			"lowMachScalingSettings" :
+  				{
+  				"lowMachScaling"       : 1,
+  				"targetReynoldsNumber" : 584400
+  				},
+  			"initialisation" : "zeroVelocity",
+  			"manufacturedSolution": 0
+  			},
+  		"boundaryPatches":
+  			{
+  			"totalNumber"      : 5,
+  			"patch_1" :
+  				{
+  				"physicalType"         : "subsonicOutlet",
+  				"evaluateCostFunction" : 1,
+  				"designType"           : "fixed",
+  				"movingWall":0
+  				},
+                          "patch_2" :
+  				{
+  				"physicalType"         : "subsonicInlet",
+  				"evaluateCostFunction" : 1,
+  				"designType"           : "fixed"
+  				},
+  			"patch_3" :
+  				{
+  				"physicalType"         : "viscousWallHard",
+  				"evaluateCostFunction" : 0,
+  				"designType"           : "fixed",
+  				"movingWall":0
+  				},
+  			"patch_4" :
+  				{
+  				"physicalType"         : "viscousWallHard",
+  				"evaluateCostFunction" : 0,
+  				"designType"           : "free",
+  				"movingWall":0,
+  				"designSettings"       :
+  					{
+  					"nodes"      : "all",
+  					"direction"  : "xyz"
+  					}
+  				},
+  			"patch_5" :
+  				{
+  				"physicalType"         : "viscousWallHard",
+  				"movingWall":0,
+  				"evaluateCostFunction" : 0,
+  				"designType"           : "fixed"
+  				
+  				}
+  			}
+ 
+  		},
+  	"solverSettings":
+  	    	{
+  		"physics":
+  			{
+  	        	"dimension" : "3D",
+  	            	"flowType"  : "Turbulent",
+  			"unsteady"  : 0,
+  			"unsteadySettings" :
+                  		{
+  				"unsteadySA" : 1,
+                  		"timeStep" : 0.01
+                  		}
+  			},
+  		"numerics":
+  			{
+  			"Acontrol": 1,
+  	            	"solverType": "JTKIRK",
+  			"linearSolver":
+  				{
+  				"mode"	       : 1,
+  				"iterationNum" : 10,
+  				"preconditioner": "ILU",
+  				"rmsCriterion" : 0.001
+  				},
+  			"cnvAccelerationAR"  : 1,
+  			"residualBasedTS"    : 1,
+  			"turbulenceCoupling" : 1,
+  			"ramping"            : 1,
+  	           	"CFL"            : 100.0,
+  	            	"beta"           : 1.0,
+                  	"fluxType"       : "ROE",
+  			"entropyCorrROE" : 0.05,
+                  	"accuracy"       : "2nd",
+  			"gradient"       : "GreenGauss",
+  			"gradientSettings":
+  			  	{
+  				"method"    : "cellBased",
+  				"bndMethod" : "faceBased"				
+  				},
+                  	"limiter"        :
+  				{
+  				"type"   : "none",
+  				"threshold": 0.05
+  				},	
+  			"rkScheme":
+  				{
+  				"nStages"  : 3
+  				},
+  	            	"multigrid":
+          	     		{
+  				"checkpointCoarseningLevel" : 0,
+  				"finestMesh"   : 1,
+  				"coarsestMesh" : 1,
+  				"nFMG"         : 20,
+          			"mPreIter"     : 1,
+  				"mCrsIter"     : 1,
+  				"mPostIter"    : 1,
+  				"underRelaxation":
+  					{
+  					"restrictFlowUnderRelax" : 1.0,
+  					"prolongFlowUnderRelax"  : 1.0,
+  					"restrictTurbUnderRelax" : 1.0,
+  					"prolongTurbUnderRelax"  : 1.0
+  					}
+          			},
+  			"lowMachPrecon" :
+  				{
+  				"switch"  : 0,
+  				"eps1"    : 1
+  				},
+  			"stallAndDivergenceDetection" :
+  				{
+  				"probingIters"         : 10,
+  				"divergenceLimitAngle" : 6.0
+  				},
+  			"wallDistanceMethod" :	"diffusionEqn"
+  	            	},
+  		"convergenceCriteria":
+  	            	{
+  			"numberOfTimeSteps"	   : 100,
+  	            	"numberOfIterations"       : 350,
+  	            	"residualConvergenceLevel" : 1e-20
+  	            	},
+  		"outputInfo":
+  			{
+  		        "verbosity" 	    : 1,
+          		"plotResidualEvery" : 1,
+  			"saveResultsEvery"  : 100
+      			}
+  		},
+      	"optimisationSettings":
+          	{
+          	"objectiveFunction":
+          		{
+              		"type"               : "totalPressureLoss",
+  			"constraint"	     : "lift",
+  			"constraintFactor"   : 4.0,
+  			"constraintValue"    : -70.0,
+  			"liftDirectionNormal":
+  				{
+  				"X" : 0.0,
+   				"Y" : 1.0,
+  				"Z" : 0.0
+  				},
+              		"targetPressureFile" : "p_rae.dat"
+              		}
+          	},
+  	
+  	"meshDeformSettings":
+      		  {
+         		 	"method"          : "inversedistance",
+  			"springSettings"   :
+  				{
+  				"stiffnessMatrix" : "currentX",
+  				"coordinatesFile" : "solution.xdmf_mesh.h5"
+  			},
+  			"elasticitySettings" :
+  				{
+  				"distanceExponent"      : 1,
+  				"refPoissonRatio"       : 0,
+  				"iterationNumber"       : 85,
+  				"underRelaxationFactor" : 0.75,
+  				"linearSolverSettings" :
+  					{
+  					"nInnerIters" : 20,
+  					"mr" : 20,
+  					"absoluteTolerance" : 1e-30,
+  					"relativeTolerance" : 1e-30
+  					}
+  				}
+          },
+      	"smoothingSettings":
+          	{
+          	"method"          : "none",
+          	"beta"            : 1.0,
+          	"iterationNumber" : 10
+          	},
+  	"adaptationSettings":
+  		{
+  		"sensorType"  : "none",
+  		"adaptMesh"   : 0
+  		},
+          "postProcessing":
+                  {
+  		"flatPlateValidationData": "NoOutput",
+  		"outputScalar" :
+  			{
+              	        "density"                      : 1,
+              		"xVelocity"                    : 1,
+              		"yVelocity"                    : 1,
+              		"zVelocity"                    : 1,
+              		"pressure"                     : 1,
+  			"nutSA"                        : 1,
+              		"temperature"                  : 1,
+              		"turbulence"                   : 1,
+              		"velocityMagnitude"            : 1,
+              		"relativeStaticPressure"       : 1,
+              		"dynamicPressure"              : 0,
+              		"totalPressure"                : 0,
+              		"totalTemperature"             : 0,
+              		"totalDensity"                 : 0,
+              		"soundSpeed"                   : 0,
+              		"machNumber"                   : 0,
+              		"specificInternalEnergy"       : 0,
+              		"specificKineticEnergy"        : 0,
+              		"specificTotalEnergy"          : 0,
+              		"specificEntropy"              : 1,
+              		"laminarDynamicViscosity"      : 0,
+              		"laminarThermalConductivity"   : 0,
+              		"turbulentDynamicViscosity"    : 1,
+              		"turbulentThermalConductivity" : 0,
+              		"wallShearStress"              : 0,
+              		"residualContinuity"           : 1,
+              		"residualXmomentum"            : 1,
+              		"residualYmomentum"            : 1,
+              		"residualZmomentum"            : 1,
+              		"residualEnergy"               : 1,
+              		"residualTurbulence"           : 1,
+              		"limiterContinuity"            : 1,
+              		"limiterXmomentum"             : 1,
+              		"limiterYmomentum"             : 1,
+              		"limiterZmomentum"             : 1,
+              		"limiterPressure"              : 1,
+              		"limiterTemperature"           : 0,
+              		"limiterTurbulence"            : 0,
+              		"distanceToWall"               : 1
+  			},
+  		"outputVector" :
+  			{
+  			"velocityVector"      : 1,
+  			"machVector"	      : 0,
+  			"pressureForceVector" : 0,
+  			"viscousForceVector"  : 0,
+  			"densityGradient"     : 1,
+  			"xVelocityGradient"   : 1,
+  			"yVelocityGradient"   : 1,
+  			"zVelocityGradient"   : 1,
+  			"pressureGradient"    : 1,
+  			"temperatureGradient" : 1,
+  			"turbulenceGradient"  : 1
+  			},
+  		"outputAdjointScalar" :
+  			{
+              	        "adjointContinuity"     : 1,
+              		"adjointXmomentum"      : 1,
+              		"adjointYmomentum"      : 1,
+              		"adjointZmomentum"      : 1,
+              		"adjointEnergy"         : 1,
+              		"adjointTurbulence"     : 1,
+              	        "residualContinuity"     : 0,
+              		"residualXmomentum"      : 0,
+              		"residualYmomentum"      : 0,
+              		"residualZmomentum"      : 0,
+              		"residualEnergy"         : 0,
+              		"residualTurbulence"     : 0
+  			},
+  		"outputAdjointVector" :
+  			{
+  			"adjointMomentumVector"      : 1
+  			},
+  		"outputSensitivityVector" :
+  			{
+  			"sensitivity"		     : 1,
+              		"surfaceFreeSensitivity"     : 1,
+              		"surfaceSensitivity"         : 1,
+              		"surfaceNormalSensitivity"   : 1,
+              		"surfaceSmoothedSensitivity" : 1,
+              	        "volumeSensitivity"          : 1
+  			},
+  		"outputDxVector" :
+  			{
+              	        "dX"                         : 1,
+              		"surfaceDx"                  : 1,
+              		"surfaceSmoothedDx"          : 1,
+              		"volumeDx"      	     : 1
+  			}
+  		},
+  	"optionalArguments": 0,
+  	"optionalSettings":
+  		{
+  		"gradientCheck" : 1,
+  		"multigridOperatorsTest" : 1
+  		}
+  }

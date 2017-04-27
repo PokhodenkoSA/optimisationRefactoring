@@ -1,0 +1,7 @@
+1) In "differentiatedCAD" folder, compile ADOLC using "adol-c" src in "adol-c" folder (there is the README that helps).
+2) In "differentiatedCAD" folder, create "build" and "install" directory for compiling occ-differentiated (src are: "occt-min-topo-install").
+3) From the "build" folder, run cmake with "USE_ADOLC" flag on.
+4) make; make install -> OCCT differentiated is installed.
+5) install mgopt (the README in the folder helps).
+6) compile "U-bendoptimisation" src (one needs to provide the right path in the cmakelists.txt before compiling).
+

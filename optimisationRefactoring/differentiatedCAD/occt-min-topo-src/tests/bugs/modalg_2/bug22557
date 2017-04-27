@@ -1,0 +1,31 @@
+puts "TODO OCC21564 ALL: The square of result shape is"
+puts "TODO OCC21564 ALL: Error :  is WRONG because number of "
+
+puts "============"
+puts "OCC22557"
+puts "============"
+puts ""
+#######################################################################
+# Bad result of the Cut operation (for CAS63-sp12-*)
+#######################################################################
+
+set BugNumber OCC22557
+
+puts "Load first shape ..."
+restore [locate_data_file bug22557_Bloc_racine_70deg.brep] b1 
+
+puts "Load second shape ..."
+restore [locate_data_file bug22557_PaveEntree.brep] b2 
+
+puts "Prepare boolean operation ..."
+bop b1 b2
+
+puts "Start boolean operation ..."
+bopcut result
+puts "Finish boolean operation ..."
+
+set square 0.172993
+
+checknbshapes result -vertex 192 -edge 288 -wire 98 -face 98 -shell 1 -solid 1 -compsolid 0 -compound 1 -shape 679
+
+set 2dviewer 0
