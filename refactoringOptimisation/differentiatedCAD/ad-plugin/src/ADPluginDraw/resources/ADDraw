@@ -1,0 +1,5 @@
+! Description of AD plug-in for DRAW Test Harness
+! See package DrawResources in OCCT for details on file format
+
+DEFAULT : AD
+AD      : ADDraw

@@ -1,0 +1,7 @@
+ExternalProject_Add(External
+  SOURCE_DIR  "${CMAKE_CURRENT_SOURCE_DIR}"
+  DOWNLOAD_COMMAND "true"
+  BUILD_COMMAND  "true"
+  INSTALL_COMMAND "true"
+  DEPENDS ADOLC
+)

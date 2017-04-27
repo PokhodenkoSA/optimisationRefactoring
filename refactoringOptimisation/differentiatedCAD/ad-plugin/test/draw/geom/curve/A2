@@ -1,0 +1,14 @@
+adc_bcurve2d cc 3 2 0 4 1 4 0 0 1.0 1 0 1.0 2 1 0.5 3 0 1.0
+adc_bcurve2d gg 3 2 0 4 1 4 0 0 1.0 1 0 1.0 2 1 10 3 0 1.0
+adc_to3d cc
+adc_to3d gg
+top; fit
+SnapShotAxo 1
+adc_test cc gg
+erase
+adc_to3d gg
+donly gg_3d
+SnapShotAxo 2
+adc_to3d cc
+donly cc_3d
+SnapShotAxo 3

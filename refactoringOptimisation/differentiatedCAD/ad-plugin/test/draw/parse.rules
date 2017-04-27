@@ -1,0 +1,9 @@
+SKIPPED /File .* could not be found/ data file is missing
+IGNORE /\bGeomConvert_ApproxSurface\b/ debug output of shapefix
+IGNORE /\bspans = 4\b/ debug output of shapefix
+FAILED /\b[Ee]xception\b/ exception
+FAILED /\b[Ee][Rr][Rr][Oo][Rr]\b/ error
+FAILED /\b[Ff][Aa][Ii][Ll][Ee][Dd]\b/ failed
+FAILED /Process killed by CPU limit/ killed by CPU limit
+FAILED /\bFaulty\b/ bad shape
+FAILED /\bCaptured contours are different\b/ different contours
